@@ -2,12 +2,9 @@ from flask import Flask, render_template, url_for, redirect, flash, request
 from app.forms import RegistrationForm
 from app.utlis import generate_token, verify_token
 from app.models import User, Barber
-from app import app, mail
+from app import app, mail, yag
 from mongoengine import DoesNotExist, ValidationError, NotUniqueError
 from flask_mail import Message
-import yagmail
-
-yag = yagmail.SMTP('omartra069@gmail.com', 'ioya kqxe iudb rfty')
 
 @app.route('/register/user', methods=['POST', 'GET'])
 def register_user():
