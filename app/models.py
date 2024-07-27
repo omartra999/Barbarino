@@ -1,4 +1,5 @@
 from mongoengine import ReferenceField,Document, StringField, DateField, DateTimeField, BooleanField,IntField
+from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
 class User(Document):
@@ -21,6 +22,12 @@ class User(Document):
             raise ValidationError("Birthday cannot be in the future")
         elif not self.birthday or not self.username or not self.password or not self.first_name or not self.last_name or not self.email:
             raise ValidationError("All fields are required")
+    
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
     
     @classmethod
     def find_by_email(cls, email):
@@ -46,7 +53,7 @@ class User(Document):
     def update_password(cls, email, password):
         user = cls.find_by_email(email)
         if user:
-            user.update(set__password=password)
+            user.update(set__password = set_password(password))
             return True
         return False
 
@@ -73,9 +80,28 @@ class User(Document):
             user.update(set__email=new_email)
             return True
         return False
+    
+    @classmethod
+    def update_address(cls, email, new_address):
+        user = cls.find_by_email(email)
+        if user:
+            user.update(set__address=new_address)
+            return True
+        return False
 
 class Address(Document):
     street = StringField(required= True ,max_length=255)
+    houseNr = IntField(required= True)
     plz = IntField(required= True)
     city = StringField(required= True ,max_length=255)
     country = StringField(required= True ,max_length=255)
+
+    def clean(self):
+        self.street = self.street.lower()
+        self.city = self.city.lower()
+        self.country = self.country.lower()
+
+        if not self.street or not self.city or not self.country :
+            raise ValidationError("all fields are required")
+
+    
