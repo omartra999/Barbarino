@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_pymongo import PyMongo
+from mongoengine import connect
 from config import Config
 from dotenv import load_dotenv
 import os
@@ -11,7 +11,7 @@ mongo = PyMongo()
 app = Flask(__name__)
 app.config.from_object(Config)
 
-mongo.init_app(app)
+connect(host= app.Config['MONGO_URI'])
 
 #model imports
 
