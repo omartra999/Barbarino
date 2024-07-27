@@ -2,16 +2,17 @@ from flask import Flask
 from mongoengine import connect
 from config import Config
 from dotenv import load_dotenv
+from flask_mail import Mail, Message
 import os
 
 load_dotenv()
 
-mongo = PyMongo()
-
 app = Flask(__name__)
+
+mail = Mail(app)
 app.config.from_object(Config)
 
-connect(host= app.Config['MONGO_URI'])
+connect(host= app.config['MONGO_URI'])
 
 #model imports
 
