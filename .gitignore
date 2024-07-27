@@ -34,6 +34,7 @@ env.bak/
 venv.bak/
 venv/
 venv/Scripts/activate
+venv/lib/site-packages/
 
 # VS Code
 .vscode/
