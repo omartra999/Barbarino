@@ -25,6 +25,7 @@ wheels/
 *.egg
 
 # Virtual Environments
+.flaskenv
 .env
 .venv
 env/
