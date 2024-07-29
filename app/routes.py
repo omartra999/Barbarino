@@ -1,10 +1,11 @@
 from flask import Flask, render_template, url_for, redirect, flash, request
 from app.forms import RegistrationForm
-from app.utlis import generate_token, verify_token
+from app.utlis import generate_token, verify_token, send_verification_email
 from app.models import User, Barber
 from app import app, mail, yag
 from mongoengine import DoesNotExist, ValidationError, NotUniqueError
 from flask_mail import Message
+import traceback
 
 @app.route('/register/user', methods=['POST', 'GET'])
 def register_user():
@@ -26,13 +27,10 @@ def register_user():
             #Generate token to verify email
             token = generate_token(user.email)
             # Send email verification link
-            verification_link = url_for('verify_email', token=token, _external=True)
-            html_content = render_template('verification_email.html', username=user.username, verification_link=verification_link)
-            yag.send(to= user.email, subject='verification_link', contents=f'To verify your email, click the following link: {verification_link}')
-
-            flash('A verification email has been sent to you. Please check your inbox.', 'success')
-            return "<h1>Registration email sent</h1>"
-        
+            if send_verification_email(user, 'Verify your email', token):
+                flash('A verification link has been sent to your email.', 'success')
+            else:
+                flash('Failed to send verification email.', 'danger')
         except ValidationError as e:
             flash(f'An error occurred: {str(e)}', 'danger')
             if user.id:  # Check if user was saved to the database
