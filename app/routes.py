@@ -1,8 +1,8 @@
 from flask import Flask, render_template, url_for, redirect, flash, request
 from app.forms import RegistrationForm
-from app.utlis import generate_token, verify_token, send_verification_email
+from app.utlis import generate_token, verify_token, send_verification_email, send_verification_email
 from app.models import User, Barber
-from app import app, mail, yag
+from app import app, mail
 from mongoengine import DoesNotExist, ValidationError, NotUniqueError
 from flask_mail import Message
 import traceback
@@ -28,9 +28,13 @@ def register_user():
             token = generate_token(user.email)
             # Send email verification link
             if send_verification_email(user, 'Verify your email', token):
-                flash('A verification link has been sent to your email.', 'success')
+                flash('A verification email has been sent to you. Please check your inbox.', 'success')
             else:
-                flash('Failed to send verification email.', 'danger')
+                flash('Failed to send verification email. Please try again.', 'danger')
+
+            flash('A verification email has been sent to you. Please check your inbox.', 'success')
+            return "<h1>Registration email sent</h1>"
+        
         except ValidationError as e:
             flash(f'An error occurred: {str(e)}', 'danger')
             if user.id:  # Check if user was saved to the database
@@ -41,6 +45,7 @@ def register_user():
                 user.delete()
         except Exception as e:
             flash(f'An unexpected error occurred: {str(e)}', 'danger')
+            traceback.print_exc()
             if user.id:  # Check if user was saved to the database
                 user.delete()
     return render_template('register.html', title='Register', form=form)
@@ -62,4 +67,3 @@ def verify_email(token):
             flash('The confirmation link is invalid or has expired.', 'warning')
     except Exception as e:
         flash(f'An error occurred: {str(e)}', 'danger')
-  # Redirect to home page or appropriate route
