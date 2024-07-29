@@ -33,7 +33,7 @@ def register_user():
                 flash('Failed to send verification email. Please try again.', 'danger')
 
             flash('A verification email has been sent to you. Please check your inbox.', 'success')
-            return "<h1>Registration email sent</h1>"
+
         
         except ValidationError as e:
             flash(f'An error occurred: {str(e)}', 'danger')
