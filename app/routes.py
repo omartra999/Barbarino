@@ -27,6 +27,7 @@ def register_user():
             token = generate_token(user.email)
             # Send email verification link
             verification_link = url_for('verify_email', token=token, _external=True)
+            html_content = render_template('verification_email.html', username=user.username, verification_link=verification_link)
             yag.send(to= user.email, subject='verification_link', contents=f'To verify your email, click the following link: {verification_link}')
 
             flash('A verification email has been sent to you. Please check your inbox.', 'success')
