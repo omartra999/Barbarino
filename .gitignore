@@ -137,4 +137,16 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+.env
+
+# React build output
+build/
+
+# Misc
+.DS_Store
 # End of '.gitignore' for Windows
