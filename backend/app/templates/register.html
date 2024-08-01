@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Register</h1>
+    <form method="POST" action="{{ url_for('register_user') }}">
+        {{ form.hidden_tag() }}
+        
+        <div>
+            {{ form.username.label }}<br>
+            {{ form.username(size=32) }}<br>
+            {% if form.username.errors %}
+                <span>{{ form.username.errors[0] }}</span><br>
+            {% endif %}
+        </div>
+
+        <div>
+            {{ form.first_name.label }}<br>
+            {{ form.first_name(size=32) }}<br>
+            {% if form.first_name.errors %}
+                <span>{{ form.first_name.errors[0] }}</span><br>
+            {% endif %}
+        </div>
+
+        <div>
+            {{ form.last_name.label }}<br>
+            {{ form.last_name(size=32) }}<br>
+            {% if form.last_name.errors %}
+                <span>{{ form.last_name.errors[0] }}</span><br>
+            {% endif %}
+        </div>
+
+        <div>
+            {{ form.email.label }}<br>
+            {{ form.email(size=32) }}<br>
+            {% if form.email.errors %}
+                <span>{{ form.email.errors[0] }}</span><br>
+            {% endif %}
+        </div>
+
+        <div>
+            {{ form.password.label }}<br>
+            {{ form.password(size=32) }}<br>
+            {% if form.password.errors %}
+                <span>{{ form.password.errors[0] }}</span><br>
+            {% endif %}
+        </div>
+
+        <div>
+            {{ form.confirm_password.label }}<br>
+            {{ form.confirm_password(size=32) }}<br>
+            {% if form.confirm_password.errors %}
+                <span>{{ form.confirm_password.errors[0] }}</span><br>
+            {% endif %}
+        </div>
+
+        <div>
+            {{ form.birthday.label }}<br>
+            {{ form.birthday() }}<br>
+            {% if form.birthday.errors %}
+                <span>{{ form.birthday.errors[0] }}</span><br>
+            {% endif %}
+        </div>
+        <div>
+            {{ form.phone_number.label }}<br>
+            {{ form.phone_number()}}<br>
+            {% if form.phone_number.errors %}
+            <span>{{ form.phone_number.errors[0] }}</span><br>
+            {% endif %}
+        </div>
+
+        <div>
+            {{ form.submit() }}
+        </div>
+    </form>
+{% endblock %}
